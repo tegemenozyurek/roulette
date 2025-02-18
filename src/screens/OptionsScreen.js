@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Haptics from 'expo-haptics';
 
 const OptionsScreen = ({ navigation }) => {
   const [music, setMusic] = useState(true);
@@ -37,24 +38,28 @@ const OptionsScreen = ({ navigation }) => {
   };
 
   const toggleMusic = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const newValue = !music;
     setMusic(newValue);
     saveOption('music', newValue);
   };
 
   const toggleSoundEffects = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const newValue = !soundEffects;
     setSoundEffects(newValue);
     saveOption('soundEffects', newValue);
   };
 
   const toggleVibrationEffects = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const newValue = !vibrationEffects;
     setVibrationEffects(newValue);
     saveOption('vibrationEffects', newValue);
   };
 
   const toggleFlashEffects = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const newValue = !flashEffects;
     setFlashEffects(newValue);
     saveOption('flashEffects', newValue);
@@ -101,7 +106,10 @@ const OptionsScreen = ({ navigation }) => {
       </View>
       <TouchableOpacity 
         style={styles.saveButton} 
-        onPress={() => navigation.navigate('StartScreen')}
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          navigation.navigate('StartScreen');
+        }}
       >
         <Text style={styles.saveButtonText}>Save</Text>
       </TouchableOpacity>

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import * as Haptics from 'expo-haptics';
 
 const StartScreen = () => {
   const navigation = useNavigation();
@@ -25,7 +26,7 @@ const StartScreen = () => {
     });
   }, []);
 
-  const title = "Roulette Game";
+  const title = "the Roulette";
   animatedValues.length = title.length;
   animatedValues.fill(0);
   animatedValues.forEach((_, i) => {
@@ -58,13 +59,19 @@ const StartScreen = () => {
       </View>
       <TouchableOpacity 
         style={styles.button} 
-        onPress={() => navigation.navigate('SetupScreen')}
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          navigation.navigate('SetupScreen');
+        }}
       >
         <Text style={styles.buttonText}>Start</Text>
       </TouchableOpacity>
       <TouchableOpacity 
         style={styles.button} 
-        onPress={() => navigation.navigate('OptionsScreen')}
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          navigation.navigate('OptionsScreen');
+        }}
       >
         <Text style={styles.buttonText}>Options</Text>
       </TouchableOpacity>

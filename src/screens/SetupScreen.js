@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Slider from "@react-native-community/slider";
+import * as Haptics from 'expo-haptics';
 
 const SetupScreen = ({ navigation }) => {
   const [chamber, setChamber] = useState(5);
@@ -11,9 +12,25 @@ const SetupScreen = ({ navigation }) => {
     setCount(1); // Reset count to 1 when chamber changes
   };
 
+  const handleGoPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    const positions = Array.from({ length: chamber }, (_, i) => i);
+    const randomPositions = [];
+    for (let i = 0; i < count; i++) {
+      const randomIndex = Math.floor(Math.random() * positions.length);
+      randomPositions.push(positions.splice(randomIndex, 1)[0]);
+    }
+    navigation.navigate('GameScreen', { chamber, randomPositions });
+  };
+
+  const handleGoBack = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    navigation.navigate('StartScreen');
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Setup Screen</Text>
+      <Text style={styles.title}>Setup</Text>
       <View style={styles.sliderContainer}>
         <Text style={styles.optionTitle}>Chamber: {chamber}</Text>
         <Slider
@@ -42,9 +59,15 @@ const SetupScreen = ({ navigation }) => {
       </View>
       <TouchableOpacity 
         style={styles.goButton} 
-        onPress={() => navigation.navigate('GameScreen')}
+        onPress={handleGoPress}
       >
         <Text style={styles.goButtonText}>Go</Text>
+      </TouchableOpacity>
+      <TouchableOpacity 
+        style={styles.goBackButton} 
+        onPress={handleGoBack}
+      >
+        <Text style={styles.goBackButtonText}>Go Back</Text>
       </TouchableOpacity>
     </View>
   );
@@ -89,6 +112,22 @@ const styles = StyleSheet.create({
   },
   goButtonText: {
     color: "#fff", // White text for the Go button
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  goBackButton: {
+    backgroundColor: "#000", // Black background
+    borderColor: "#fff", // White border
+    borderWidth: 2,
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginVertical: 10,
+    width: '50%', // Adjusted width
+    alignItems: "center",
+  },
+  goBackButtonText: {
+    color: "#fff", // White text for the Go Back button
     fontSize: 20,
     fontWeight: "bold",
   },
