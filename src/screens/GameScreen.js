@@ -10,6 +10,7 @@ const GameScreen = ({ navigation, route }) => {
   const [showButton, setShowButton] = useState(false);
   const [currentCount, setCurrentCount] = useState(-1);
   const [backgroundColor, setBackgroundColor] = useState('#000000');
+  const [showPlayAgain, setShowPlayAgain] = useState(false);
 
   useEffect(() => {
     if (countdown > 0) {
@@ -32,6 +33,9 @@ const GameScreen = ({ navigation, route }) => {
   const handleShoot = async () => {
     if (currentCount < chamber - 1) {
       if (randomPositions.includes(currentCount + 1)) {
+        // Hemen butonu kaldır
+        setShowButton(false);
+        
         // Silah patlama efekti
         await flashScreen();
         
@@ -52,15 +56,25 @@ const GameScreen = ({ navigation, route }) => {
         // Titreşimi durdur ve ekranı normale döndür
         Vibration.cancel();
         setBackgroundColor('#000000');
+
+        // 2 saniye sonra Play Again butonunu göster
+        setTimeout(() => {
+          setShowPlayAgain(true);
+        }, 2000);
+        
       } else {
         // Boş tetik efekti
         setBackgroundColor('#1A1A1A'); // Hafif gri flash
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         await new Promise(resolve => setTimeout(resolve, 100));
         setBackgroundColor('#000000');
+        setCurrentCount(currentCount + 1);
       }
-      setCurrentCount(currentCount + 1);
     }
+  };
+
+  const handlePlayAgain = () => {
+    navigation.replace('SetupScreen');
   };
 
   return (
@@ -73,6 +87,17 @@ const GameScreen = ({ navigation, route }) => {
             <Text style={styles.buttonText}>SHOOT!</Text>
           </TouchableOpacity>
         </>
+      ) : showPlayAgain ? (
+        <View style={styles.gameOverContainer}>
+          <Text style={styles.gameOverText}>Game Over</Text>
+          <TouchableOpacity 
+            style={styles.playAgainButton} 
+            onPress={handlePlayAgain}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.playAgainText}>PLAY AGAIN</Text>
+          </TouchableOpacity>
+        </View>
       ) : (
         <Text style={styles.countdown}>{countdown}</Text>
       )}
@@ -119,6 +144,30 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: width * 0.15,
     color: '#ffffff',
+    fontWeight: 'bold',
+  },
+  gameOverContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  gameOverText: {
+    fontSize: width * 0.15,
+    color: '#ffffff',
+    fontWeight: 'bold',
+    marginBottom: height * 0.05,
+  },
+  playAgainButton: {
+    backgroundColor: 'transparent',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderWidth: 2,
+    borderColor: '#ffffff',
+    borderRadius: 10,
+    marginVertical: 10,
+  },
+  playAgainText: {
+    color: '#ffffff',
+    fontSize: width * 0.06,
     fontWeight: 'bold',
   },
 });

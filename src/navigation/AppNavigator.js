@@ -7,7 +7,6 @@ import StartScreen from "../screens/StartScreen";
 import SetupScreen from "../screens/SetupScreen";
 import GameScreen from "../screens/GameScreen";
 import OptionsScreen from "../screens/OptionsScreen";
-import GameOverScreen from "../screens/GameOverScreen";
 
 const Stack = createStackNavigator();
 
@@ -19,7 +18,6 @@ const linking = {
       SetupScreen: 'setup',
       GameScreen: 'game',
       OptionsScreen: 'options',
-      GameOverScreen: 'game-over',
     },
   },
 };
@@ -32,7 +30,6 @@ const AppNavigator = () => {
         <Stack.Screen name="SetupScreen" component={SetupScreen} />
         <Stack.Screen name="GameScreen" component={GameScreen} />
         <Stack.Screen name="OptionsScreen" component={OptionsScreen} />
-        <Stack.Screen name="GameOverScreen" component={GameOverScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
